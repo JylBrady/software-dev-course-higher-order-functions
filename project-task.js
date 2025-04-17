@@ -16,13 +16,7 @@ They will:
 // 📦 Starting Dataset: Product List
 // ============================================
 
-const products = [
-  { name: "Laptop", price: 1000, inStock: true },
-  { name: "Phone", price: 500, inStock: false },
-  { name: "Tablet", price: 800, inStock: true },
-  { name: "Monitor", price: 300, inStock: true },
-  { name: "Keyboard", price: 100, inStock: false },
-];
+
 
 // ============================================
 // 🔧 Tasks
@@ -70,7 +64,6 @@ Step-by-Step:
 3. Use this returned function inside a `map()` call to apply discounts to all products.
 */
 
-
 /*
 🔹 Task 4: Calculate Total Inventory Value
 
@@ -82,7 +75,6 @@ Step-by-Step:
 3. Store the total in a new variable.
 */
 
-
 // ============================================
 // 🧪 Console Test Your Work
 // ============================================
@@ -91,3 +83,70 @@ Step-by-Step:
 // console.log("Uppercased names:", ...);
 // console.log("Discounted products:", ...);
 // console.log("Total value in stock:", ...);
+
+const products = [
+  { name: "Laptop", price: 1000, inStock: true },
+  { name: "Phone", price: 500, inStock: false },
+  { name: "Tablet", price: 800, inStock: true },
+  { name: "Monitor", price: 300, inStock: true },
+  { name: "Keyboard", price: 100, inStock: false },
+];
+
+// Task 1: Filter Products by Availability
+function filterProducts(products, callback) {  //function accepts product array and a callback function
+  return products.filter(callback);  //filters array based on callback
+}
+console.log("In-Stock Products:", filterProducts(products, availability => availability.inStock === true));
+
+//Task 2: Transform Product Names
+const transformed = products.map(({ name }) => ({ name: name.toUpperCase() }));  //creates a new array of product names in UPPERCASE.
+console.log ('Transform Product Names:', transformed);
+
+//Task 3: Generate Discounted Prices
+
+function applyDiscount(discountPercent) {// higher-order function: Accepts a discount percentage 
+  return function(product){   //Returns a function that takes a product
+    return {                 //Returns a discounted price
+      ...product,
+      price: product.price - (product.price * discountPercent),
+    }
+  }
+}
+const discounted = products.map(applyDiscount(.1));   //calls function with a .1 discount
+
+console.log ("Discounted:", discounted);
+
+
+//Task 4: Calculate Total Inventory Value
+const inStockTotal = products  //Stores total price of all in stock products
+  .filter(product => product.inStock) // filter for in stock products
+  .reduce((total, product) => total + product.price, 0);  //Sum prices
+
+console.log("Total Inventory Value:", inStockTotal);
+
+
+// ============================================
+// Console Test
+// ============================================
+/*
+In-Stock Products: [
+  { name: 'Laptop', price: 1000, inStock: true },
+  { name: 'Tablet', price: 800, inStock: true },
+  { name: 'Monitor', price: 300, inStock: true }
+]
+Transform Product Names: [
+  { name: 'LAPTOP' },
+  { name: 'PHONE' },
+  { name: 'TABLET' },
+  { name: 'MONITOR' },
+  { name: 'KEYBOARD' }
+]
+Discounted: [
+  { name: 'Laptop', price: 900, inStock: true },
+  { name: 'Phone', price: 450, inStock: false },
+  { name: 'Tablet', price: 720, inStock: true },
+  { name: 'Monitor', price: 270, inStock: true },
+  { name: 'Keyboard', price: 90, inStock: false }
+]
+Total Inventory Value: 2100
+*/
